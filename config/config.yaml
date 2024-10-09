@@ -1,0 +1,3 @@
+paths:
+  app_dir: 'resources\adb'
+  yt-dplt_dir: 'resources\ytdlp'
