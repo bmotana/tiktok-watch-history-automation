@@ -88,7 +88,7 @@ class ImageDownloader:
                 img_url = img.get_attribute('src')
                 if ('p16-sign-va.tiktokcdn.com' in img_url) and ("tos-maliva-i-photomode-us" in img_url):
                     signature = self._get_signature(img_url)
-                    if not signature in signatures and signature:
+                    if signature not in signatures and signature:
                         save_path = f'{self.downloads_path}/image_{index}_{signature}.jpg'
                         try:
                             self.download_image(img_url, save_path)

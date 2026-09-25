@@ -1,2 +1,86 @@
-/test
-/tests
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+.eggs/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing, typing, and linting caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.cert
+
+# Downloader credentials and session cookies (prevents accidental credential leakage)
+cookies.txt
+*.cookies
+*cookies*.txt
+
+# Downloader outputs and temporary media files
+*.mp4
+*.mkv
+*.webm
+*.part
+*.ytdl
+info.json
+tiktok_image_*.jpg
+
+# gallery-dl downloaded media folders (preserves tracked test files)
+resources/ytdlp/gallery-dl/*/
+!resources/ytdlp/gallery-dl/imxto/
+
+# Large binaries (>100MB exceeds GitHub push limits)
+resources/ytdlp/ffmpeg.exe
+resources/ytdlp/ffplay.exe
+resources/ytdlp/ffprobe.exe
+resources/ytdlp/*.exe
+
+# Webdriver binaries and application logs
+chromedriver.exe
+geckodriver.exe
+*.log
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# Operating system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
