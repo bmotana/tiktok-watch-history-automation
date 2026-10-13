@@ -39,18 +39,34 @@ def extract_link_and_next(controller: AndroidController, video_downloader: Video
         controller.click(351, 1100)
         time.sleep(2)
         link = pyperclip.paste()
-        link_processor.get_link(link)
+        try:
+            link_processor.get_link(link)
+        except Exception as e:
+            logging.warning("Skipping watch-history item: %s", e)
+            return
+
+        if not link_processor.is_valid_tiktok_url():
+            logging.warning("Skipping watch-history item: resolved URL is not a supported TikTok video or photo.")
+            return
+
         content_type = link_processor.get_content_type()
         if content_type == "photo":
-            img_downloader = ImageDownloader(link)
+            img_downloader = ImageDownloader(link_processor.resolved_link)
             img_downloader.download()
         elif content_type == "video":
-            video_downloader.get_link(link)
+            video_downloader.get_link(link_processor.resolved_link)
             video_downloader.download_video()
+        else:
+            logging.warning("Skipping watch-history item: unsupported TikTok content type %r.", content_type)
+            return
         time.sleep(6)
-        controller.swipe_up()
     except Exception as e:
         logging.error(f"Error in extract_link_and_next: {str(e)}")
+    finally:
+        try:
+            controller.swipe_up()
+        except Exception as e:
+            logging.error("Could not advance to the next watch-history item: %s", e)
 
 def multiple_links(num_of_links: int, controller: AndroidController, video_downloader: VideoDownloader, link_processor: LinkProcessor) -> None:
     try:

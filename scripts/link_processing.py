@@ -66,12 +66,30 @@ class LinkProcessor:
             raise ValueError("Link must be a non-empty string")
 
         self.original_link = link.strip()
+        if not self._is_tiktok_host(self.original_link):
+            raise TikTokURLProcessingError(
+                "Clipboard value is not an HTTP(S) TikTok URL; skipping it."
+            )
         try:
             self.resolved_link = self._resolve_shortlink()
-            logger.info(f"Successfully resolved URL")
+            logger.info("Successfully resolved TikTok URL")
         except RequestException as e:
             logger.error(f"Failed to resolve URL: {str(e)}")
             raise TikTokURLProcessingError(f"Failed to resolve URL: {str(e)}")
+
+    @staticmethod
+    def _is_tiktok_host(url: str) -> bool:
+        """Return whether a URL uses HTTP(S) and a TikTok-owned hostname."""
+        try:
+            parsed = urlparse(url)
+            hostname = (parsed.hostname or "").lower().rstrip(".")
+            return (
+                parsed.scheme.lower() in {"http", "https"}
+                and (hostname == TikTokURLPatterns.DOMAIN
+                     or hostname.endswith(f".{TikTokURLPatterns.DOMAIN}"))
+            )
+        except ValueError:
+            return False
 
     def _resolve_shortlink(self) -> str:
         """
@@ -103,10 +121,8 @@ class LinkProcessor:
             bool: True if the URL is a valid TikTok URL, False otherwise.
         """
         try:
-            parsed = urlparse(self.resolved_link)
-
-            if not parsed.netloc.endswith(TikTokURLPatterns.DOMAIN):
-                logger.debug(f"Invalid domain: {parsed.netloc}")
+            if not self._is_tiktok_host(self.resolved_link):
+                logger.debug("Invalid TikTok URL host")
                 return False
 
             is_valid = bool(re.match(TikTokURLPatterns.FULL_URL, self.resolved_link))

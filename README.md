@@ -39,22 +39,19 @@ python main.py
 
 The automation navigates to watch history and processes up to ten entries. Downloads are saved to your Windows `Downloads` folder. The script may prompt you to dismiss an in-app advertisement before continuing.
 
+Before downloading, the script checks that copied links use HTTP(S) and a TikTok hostname, follows TikTok short links, and accepts only resolved video or photo URLs. Invalid, unsupported, or off-site links are logged and skipped; the automation then advances to the next watch-history entry.
+
 ## Development
 
-Install the development dependency and run Ruff:
+Install the development dependency, run Ruff, and execute the unit tests:
 
 ```powershell
 python -m pip install -e ".[dev]"
 ruff check .
-```
-
-Run the unit tests with:
-
-```powershell
 python -m unittest discover -s tests -v
 ```
 
-GitHub Actions runs Ruff and checks Python syntax on Windows for pushes and pull requests.
+GitHub Actions runs Ruff, the unit tests, and a Python syntax check on Windows for pushes and pull requests. Link-processing tests mock network requests, so they do not contact TikTok.
 
 ## Privacy and responsible use
 
